@@ -1,7 +1,7 @@
 services:
   film-glow-studio:
     build: .
-    image: ghcr.io/lapentad/film-glow-studio:latest
+    image: ghcr.io/lapentad/FilmGlowStudio:latest
     ports:
       - "8080:80"
     restart: unless-stopped

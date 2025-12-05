@@ -43,17 +43,17 @@ docker-compose up -d
 
 ```sh
 # Build image
-docker build -t FilmGlowStudio .
+docker build -t filmglowstudio .
 
 # Run container
-docker run -p 8080:80 FilmGlowStudio
+docker run -p 8080:80 filmglowstudio
 ```
 
 ### Pull from GitHub Container Registry
 
 ```sh
-docker pull ghcr.io/flapenta/FilmGlowStudio:latest
-docker run -p 8080:80 ghcr.io/flapenta/FilmGlowStudio:latest
+docker pull ghcr.io/flapenta/filmglowstudio:latest
+docker run -p 8080:80 ghcr.io/flapenta/filmglowstudio:latest
 ```
 
 Access at http://localhost:8080

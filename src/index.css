@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Cinematic dark theme - film lab aesthetic */
+    --background: 0 0% 7%;
+    --foreground: 40 10% 95%;
+
+    --card: 0 0% 10%;
+    --card-foreground: 40 10% 95%;
+
+    --popover: 0 0% 8%;
+    --popover-foreground: 40 10% 95%;
+
+    /* Warm amber accent - film glow */
+    --primary: 38 92% 58%;
+    --primary-foreground: 0 0% 10%;
+
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 40 10% 95%;
+
+    --muted: 0 0% 18%;
+    --muted-foreground: 40 5% 65%;
+
+    --accent: 38 92% 58%;
+    --accent-foreground: 0 0% 10%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 40 10% 95%;
+
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 38 92% 58%;
+
+    --radius: 0.5rem;
+
+    /* Film grain overlay */
+    --film-grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Custom scrollbar for cinematic feel */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted));
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.5);
+  }
+}

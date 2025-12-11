@@ -8,6 +8,8 @@ A web app that adds analog film effects to your digital photos.
 
 ## Quick Start
 
+### A) Local Deploy
+
 ```sh
 docker pull ghcr.io/flapenta/filmglowstudio:latest
 docker run -p 8080:80 ghcr.io/flapenta/filmglowstudio:latest
@@ -15,6 +17,9 @@ docker run -p 8080:80 ghcr.io/flapenta/filmglowstudio:latest
 
 Open http://localhost:8080 in your browser.
 
+### B) Deploy on Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Flapentad%2FFilmGlowStudio)
 
 ## What it does
 

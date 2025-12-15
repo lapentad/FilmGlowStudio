@@ -3,7 +3,7 @@ import init, { PhotonImage, gaussian_blur, threshold, blend } from '@silvia-odwy
 let initialized = false;
 
 self.onmessage = async (e) => {
-  const { imageData, halation, bloom, grain, halationThreshold = 180, halationBlur = 50, bloomThreshold = 180, bloomBlur = 50, bloomBlendMode = 'screen', grainSize = 1, grainDistribution = 50, filmStock = 'none', vignette = 0, contrast = 0, shadows = 0, highlights = 0, saturation = 0, vibrance = 0, sharpness = 0, softness = 0, temperature = 0 } = e.data;
+  const { imageData, halation, bloom, grain, halationThreshold = 180, halationBlur = 50, bloomThreshold = 180, bloomBlur = 50, bloomBlendMode = 'screen', grainSize = 1, grainDistribution = 50, filmStock = 'none', vignette = 0, contrast = 0, shadows = 0, highlights = 0, saturation = 0, vibrance = 0, sharpness = 0, softness = 0, temperature = 0, showMask = false } = e.data;
 
   if (!initialized) {
     await init();
@@ -156,25 +156,44 @@ self.onmessage = async (e) => {
 
   // Apply halation
   if (halation > 0) {
+    // 1. Create a clone for the halation layer
     let halationImage = new PhotonImage(new Uint8Array(workingData), imageData.width, imageData.height);
-
+    
+    // 2. Isolate Highlights
     threshold(halationImage, halationThreshold);
+    
+    // 3. First Blur (The "Spread")
     const blurAmt = Math.max(1, Math.floor((halationBlur / 100) * halation));
     gaussian_blur(halationImage, blurAmt);
 
-    const redData = halationImage.get_raw_pixels();
-    for (let i = 0; i < redData.length; i += 4) {
-      if (redData[i] !== 0 || redData[i + 1] !== 0 || redData[i + 2] !== 0) {
-        let brightness = (redData[i] + redData[i + 1] + redData[i + 2]) / 3;
-        redData[i] = Math.min(255, brightness * (halation / 50));
-        redData[i + 1] = 0;
-        redData[i + 2] = 0;
+    // Debug view
+    if (showMask === 'halation') {
+      const result = halationImage.get_image_data();
+      self.postMessage({ imageData: result });
+      return;
+    }
+
+    // 4. Colorize (The "Rust" Look)
+    const hData = halationImage.get_raw_pixels();
+    const strength = halation / 50;
+
+    for (let i = 0; i < hData.length; i += 4) {
+      if (hData[i] > 0) {
+        const brightness = (hData[i] + hData[i + 1] + hData[i + 2]) / 3;
+        
+        hData[i]     = Math.min(255, brightness * strength);           // Red
+        hData[i + 1] = Math.min(255, (brightness * strength) * 0.15);  // Green (rust tint)
+        hData[i + 2] = 0;                                              // Blue
       }
     }
 
-    halationImage = new PhotonImage(redData, imageData.width, imageData.height);
-    gaussian_blur(halationImage, blurAmt);
+    // 5. Re-wrap data into PhotonImage
+    halationImage = new PhotonImage(hData, imageData.width, imageData.height);
 
+    // 6. Second Blur (The "Diffusion")
+    gaussian_blur(halationImage, blurAmt / 2);
+
+    // 7. Blend using Screen
     blend(originalImage, halationImage, 'screen');
   }
 
@@ -187,6 +206,12 @@ self.onmessage = async (e) => {
     const blurAmt = Math.max(3, Math.floor(bloomBlur / 2));
     gaussian_blur(bloomImage, blurAmt);
     gaussian_blur(bloomImage, blurAmt);
+    
+    if (showMask === 'bloom') {
+      const result = bloomImage.get_image_data();
+      self.postMessage({ imageData: result });
+      return;
+    }
     
     // Apply intensity control via opacity
     const bloomData = bloomImage.get_raw_pixels();

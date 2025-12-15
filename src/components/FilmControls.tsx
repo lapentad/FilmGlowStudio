@@ -28,6 +28,7 @@ interface FilmControlsProps {
   sharpness?: number;
   softness?: number;
   temperature?: number;
+  showMask?: string;
   onHalationThresholdChange?: (value: number) => void;
   onFilmStockChange?: (value: string) => void;
   onVignetteChange?: (value: number) => void;
@@ -45,6 +46,7 @@ interface FilmControlsProps {
   onBloomBlendModeChange?: (value: string) => void;
   onGrainSizeChange?: (value: number) => void;
   onGrainDistributionChange?: (value: number) => void;
+  onShowMaskChange?: (value: string) => void;
 }
 
 export const FilmControls = ({
@@ -71,6 +73,7 @@ export const FilmControls = ({
   sharpness = 0,
   softness = 0,
   temperature = 0,
+  showMask = 'none',
   onHalationThresholdChange,
   onFilmStockChange,
   onVignetteChange,
@@ -88,6 +91,7 @@ export const FilmControls = ({
   onBloomBlendModeChange,
   onGrainSizeChange,
   onGrainDistributionChange,
+  onShowMaskChange,
 }: FilmControlsProps) => {
   const [expandedHalation, setExpandedHalation] = useState(false);
   const [expandedBloom, setExpandedBloom] = useState(false);
@@ -248,6 +252,10 @@ export const FilmControls = ({
               />
             </div>
             <div className="space-y-2">
+              <Label className="text-xs">View Mask</Label>
+              <button onClick={() => onShowMaskChange?.(showMask === 'bloom' ? 'none' : 'bloom')} className={`w-full px-3 py-2 text-xs rounded border transition-colors ${showMask === 'bloom' ? 'bg-primary text-primary-foreground' : 'bg-background hover:bg-muted'}`}>{showMask === 'bloom' ? 'Hide Mask' : 'Show Mask'}</button>
+            </div>
+            <div className="space-y-2">
               <Label className="text-xs">Blend Mode</Label>
               <Select value={bloomBlendMode} onValueChange={onBloomBlendModeChange}>
                 <SelectTrigger className="h-8">
@@ -319,6 +327,10 @@ export const FilmControls = ({
                 value={[halationBlur]}
                 onValueChange={([value]) => onHalationBlurChange?.(value)}
               />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-xs">View Mask</Label>
+              <button onClick={() => onShowMaskChange?.(showMask === 'halation' ? 'none' : 'halation')} className={`w-full px-3 py-2 text-xs rounded border transition-colors ${showMask === 'halation' ? 'bg-primary text-primary-foreground' : 'bg-background hover:bg-muted'}`}>{showMask === 'halation' ? 'Hide Mask' : 'Show Mask'}</button>
             </div>
           </div>
         )}

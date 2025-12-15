@@ -26,6 +26,7 @@ const Index = () => {
   const [sharpness, setSharpness] = useState(0);
   const [softness, setSoftness] = useState(0);
   const [temperature, setTemperature] = useState(0);
+  const [showMask, setShowMask] = useState('none');
 
   const handleImageUpload = (file: File) => {
     const reader = new FileReader();
@@ -96,6 +97,7 @@ const Index = () => {
                 sharpness={sharpness}
                 softness={softness}
                 temperature={temperature}
+                showMask={showMask}
               />
             </div>
 
@@ -143,6 +145,8 @@ const Index = () => {
                   onSharpnessChange={setSharpness}
                   onSoftnessChange={setSoftness}
                   onTemperatureChange={setTemperature}
+                  showMask={showMask}
+                  onShowMaskChange={setShowMask}
                 />
               </div>
 
